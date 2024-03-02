@@ -65,18 +65,22 @@ def get_face(image_path: str) -> np.ndarray:
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(100, 100))
     
     # If no face is detected or image size is smaller than the threshold, return empty array
     if len(faces) == 0 or get_image_size(f'{image_path}.jpg') < MIN_SIZE:
         return []
 
-    # Extract the first detected face
-    (x, y, w, h) = faces[0]
-    face = image[y:y+h, x:x+w]
-    face_bw = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+    # Iterate over detected faces to find the frontal face
+    for (x, y, w, h) in faces:
+        # Check if the face is frontal
+        if w > 0.8 * h:  # Assuming frontal faces are wider than taller
+            # Extract the detected face
+            face = image[y:y+h, x:x+w]
+            face_bw = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+            return face_bw
 
-    return face_bw
+    return []
 
 
 # Get paths of all image files in the folder
