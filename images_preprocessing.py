@@ -6,7 +6,7 @@ import os
 MIN_SIZE = 1024 * 15
 
 # Folder path containing images
-FOLDER_PATH = "/wiki_crop"
+FOLDER_PATH = "C:\\Users\\nikit\\Downloads\\wiki_crop"
 
 
 def get_image_size(filename: str) -> int:
@@ -82,13 +82,17 @@ def get_face(image_path: str) -> np.ndarray:
 # Get paths of all image files in the folder
 IMAGE_PATHES = get_image_pathes(FOLDER_PATH)
 
+# Initialize a counter
 i = 0
+
 for name in IMAGE_PATHES:
     result = get_face(name)
 
     # If a face is detected, save it to the result folder
     if len(result) != 0:
-        cv2.imwrite(f'result_folder/{i + 1}.jpg', result)
+        # Resize the detected face to 256x256
+        resized_face = cv2.resize(result, (256, 256))
+        cv2.imwrite(f'result_folder/{i + 1}.jpg', resized_face)
         i += 1
 
     # Break loop after processing 9000 images
