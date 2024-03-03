@@ -12,7 +12,7 @@ model = VGG16(weights='imagenet', include_top=False)
 
 # Function to extract features from image using VGG16
 def extract_features(image_path, model):
-    img = load_img(image_path, target_size=(224, 224))
+    img = load_img(image_path, target_size=(256, 256))
     img_array = img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = preprocess_input(img_array)
@@ -23,7 +23,7 @@ def extract_features(image_path, model):
 # Function to perform clustering and organize images into folders
 def cluster_faces(image_folder, output_folder):
     # Define the number of clusters
-    num_clusters = 5
+    num_clusters = 10  # Limit the number of clusters to 10
 
     # Initialize KMeans clustering
     kmeans = KMeans(n_clusters=num_clusters, random_state=42)
@@ -64,8 +64,8 @@ def cluster_faces(image_folder, output_folder):
         shutil.copy(image_path, cluster_folder)
 
 # Define input and output folders
-input_folder = "C:\\Users\\Ksena\\Documents\\kpi\\hackaton\\hackatonchiks\\images"
-output_folder = "C:\\Users\\Ksena\\Documents\\kpi\\hackaton\\hackatonchiks\\clustered_images"
+input_folder = "C:\\Users\\Ksena\\Documents\\kpi\\zhostka\\hackatonchiks\\result_folder"
+output_folder = "C:\\Users\\Ksena\\Documents\\kpi\\zhostka\\hackatonchiks\\clustered_images"
 
 # Perform face clustering and organize images into folders
 cluster_faces(input_folder, output_folder)
